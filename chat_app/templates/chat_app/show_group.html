@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h4> Click Here to Start Chat in Groups</h4>
+{% for group in groups %}
+<div style="margin-top:20px;">
+    <a href="{% url 'client-server' group.name %}" style="border:1px solid green; font-size:30px; background:green; color:white; text-decoration:none;">
+        {{group.name}}</a>
+    <br>
+</div>
+{% endfor %}
+</div>
+</body>
+</html>

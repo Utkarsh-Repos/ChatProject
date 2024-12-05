@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<textarea id="chat-data" cols="100" rows="10">
+    {% for ch in chat %}
+        {{ch.content}}
+    {% endfor %}
+</textarea>
+<br>
+<input type="text" id="chat-mssg-input" size="100">
+<br>
+<button type="button" value="send" id="chat-submit" onclick="sendData();">Send DATA</button>
+<script>
+    const groupName = '{{group_name}}'
+    console.log('groupName>>>>>>', groupName)
+    var ws = new WebSocket('ws://127.0.0.1:8000/ws/cla/' + groupName +'/')
+
+    ws.onopen = function(event) {
+        console.log('connection is open>>>>', event);
+    }
+
+    ws.onmessage = function(event) {
+        console.log('message received from server>>>>', event);
+        const data = JSON.parse(event.data)
+        $('#chat-data').append(data.msg)
+    }
+    ws.onerror = function(event) {
+        console.log('websocket error occurred >>>>', event);
+    }
+    ws.onclose = function(event) {
+        console.log('websocket connection closed >>>>', event);
+    }
+
+    function sendData()
+        {
+         const input_val = $('#chat-mssg-input').val();
+         ws.send(JSON.stringify({
+            'msg': input_val
+         }))
+        }
+</script>
+</body>
+</html>
